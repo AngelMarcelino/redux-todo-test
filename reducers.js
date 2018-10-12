@@ -3,7 +3,10 @@ import {
   ADD_TODO,
   TOGGLE_TODO,
   SET_VISIBILITY_FILTER,
-  VisibilityFilters
+  VisibilityFilters,
+  INIT_FETCH_REQUEST,
+  END_FETCH_REQUEST,
+  RECEIVE_TODOS
 } from './actions'
 const { SHOW_ALL } = VisibilityFilters
 
@@ -35,14 +38,31 @@ function todos(state = [], action) {
         }
         return todo
       })
+    case RECEIVE_TODOS:
+      return action.todos;
     default:
       return state
   }
 }
 
+const initialConectionStatus = {
+  isLoading: false
+};
+
+function conectionStatus(state = initialConectionStatus, action) {
+  switch (action.type) {
+    case INIT_FETCH_REQUEST: 
+      return { isLoading: true };
+    case END_FETCH_REQUEST:
+      return { isLoading: false };
+  }
+  return state;
+}
+
 const todoApp = combineReducers({
   visibilityFilter,
-  todos
+  todos,
+  conectionStatus
 });
 
 export default todoApp

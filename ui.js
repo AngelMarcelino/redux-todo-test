@@ -40,6 +40,8 @@ function all(state) {
 
 let toggleFunction = null;
 let changeFilter = null;
+let saveTodos = null;
+let loadTodos = null;
 
 function createTitleElem(title) {
     let titleElem = document.createElement('span');
@@ -110,7 +112,19 @@ function fillFilters() {
         changeFilter(event.target.value);
     })
 }
-fillFilters();
+function init() {
+    fillFilters();
+    document.getElementById('save')
+        .addEventListener('click', () => {
+            saveTodos();
+        })
+    document.getElementById('load')
+        .addEventListener('click', () => {
+            loadTodos();
+        });
+}
+
+init();
 
 export function drawUI(state) {
     //var result = all(state);
@@ -118,6 +132,8 @@ export function drawUI(state) {
     contentElement.innerHTML = '';
     var result = getNodes(state);
     contentElement.appendChild(result);
+    document.getElementById('loading')
+        .innerText = state.conectionStatus.isLoading ? 'loading...' : '';
 }
 
 export function registerAddTodo(fn) {
@@ -143,5 +159,17 @@ export function registerToggle(fn) {
 export function registerChangeFilter(fn) {
     if (changeFilter === null) {
         changeFilter = fn;
+    }
+}
+
+export function registerSaveTodos(fn) {
+    if (saveTodos === null) {
+        saveTodos = fn;
+    }
+}
+
+export function registerLoadTodos(fn) {
+    if(loadTodos === null) {
+        loadTodos = fn;
     }
 }
